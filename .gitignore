@@ -1,0 +1,8 @@
+__pycache__/
+.venv/
+.idea/
+config/settings.py
+clients.json
+database/*.db
+database/*.bk
+test.py
