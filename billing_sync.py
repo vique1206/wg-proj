@@ -151,4 +151,6 @@ async def main():
         fin_sync()
     )
 if __name__ == "__main__":
+    from services.traffic import _setup_parent_class
+    _setup_parent_class("awg0")
     asyncio.run(main())
