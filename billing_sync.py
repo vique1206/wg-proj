@@ -136,14 +136,12 @@ async def fin_sync():
                     user.status = models.UserStatus.RESTRICTED
                 else:
                     user.status = models.UserStatus.ACTIVE
-                    
-                user_class_sync(user)
                 
         await asyncio.sleep(FIN_SYNC_INTERVAL)
         
 async def tech_procedure():
     while True:
-        ## cleanup()
+        cleanup()
         tech_sync()
         await asyncio.sleep(TECH_SYNC_INTERVAL)
     
