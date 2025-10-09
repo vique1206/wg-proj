@@ -5,14 +5,15 @@ from services.clients import *
 from services.awg import generate_keys, is_valid_key
 appf = Flask(__name__)
 
-PROD = False ## Значение, чтоб некоторые функции не выполнялись, пока не в продакшене
+from config.settings import IS_PROD
+TEST_IP = "10.88.88.2"
 
 @appf.route("/", methods=["GET"])
 def profile():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permisson = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -25,10 +26,10 @@ def profile():
         
 @appf.route("/api/profile", methods=["GET"])
 def get_profile():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     user = ClientService.get_user_by_ip(ip)
     if not user:
         return "Доступ запрещен, если вы уверены, что это ошибка, обратитесь к администратору", 403
@@ -39,10 +40,10 @@ def get_profile():
 
 @appf.route("/api/addDevice", methods=["POST"])
 def add_device():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     data = request.get_json(force=True, silent=True)
     with get_session() as session:
         user = ClientService.get_user_by_ip(ip, session=session)
@@ -67,10 +68,10 @@ def add_device():
 
 @appf.route("/api/getDevice", methods=["POST"])
 def get_device():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
         
     data = request.get_json(force=True, silent=True)
     with get_session() as session:
@@ -90,10 +91,10 @@ def get_device():
 
 @appf.route("/api/deleteDevice", methods=["POST"])
 def delete_device():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
         
     data = request.get_json(force=True, silent=True)
     with get_session() as session:
@@ -116,10 +117,10 @@ def delete_device():
 
 @appf.route('/api/editDevice', methods=["POST"])
 def edit_device():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
         
         data = request.get_json(force=True, silent=True)
         with get_session() as session:
@@ -141,10 +142,10 @@ def edit_device():
 
 @appf.route("/panel", methods=["GET"])
 def panel():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -157,10 +158,10 @@ def panel():
         
 @appf.route("/api/admin/get_clients", methods=["GET"])
 def admin_get_clients():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -179,10 +180,10 @@ def admin_get_clients():
 
 @appf.route("/api/admin/get_client/<int:user_id>", methods=["GET"])
 def admin_get_client(user_id):
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -199,10 +200,10 @@ def admin_get_client(user_id):
 
 @appf.route("/api/admin/get_client_statuses", methods=["GET"])
 def admin_get_client_statuses():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -218,10 +219,10 @@ def admin_get_client_statuses():
 
 @appf.route("/api/admin/get_client_roles", methods=["GET"])
 def admin_get_client_roles():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -237,10 +238,10 @@ def admin_get_client_roles():
 
 @appf.route("/api/admin/get_device_statuses", methods=["GET"])
 def admin_get_device_statuses():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -256,10 +257,10 @@ def admin_get_device_statuses():
 
 @appf.route("/api/admin/add_client", methods=["POST"])
 def admin_add_client():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -307,10 +308,10 @@ def admin_add_client():
 
 @appf.route("/api/admin/edit_client/<int:user_id>", methods=["POST"])
 def admin_edit_client(user_id):
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -353,10 +354,10 @@ def admin_edit_client(user_id):
 
 @appf.route("/api/admin/delete_client/<int:user_id>", methods=["DELETE"])
 def admin_delete_client(user_id):
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         actor = ClientService.get_user_by_ip(ip)
@@ -374,10 +375,10 @@ def admin_delete_client(user_id):
     
 @appf.route("/api/admin/get_devices", methods=["GET"])
 def admin_get_devices():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -397,10 +398,10 @@ def admin_get_devices():
 
 @appf.route("/api/admin/get_device/<int:device_id>", methods=["GET"])
 def admin_get_device(device_id):
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -418,10 +419,10 @@ def admin_get_device(device_id):
 
 @appf.route("/api/admin/add_device", methods=["POST"])
 def admin_add_device():
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -452,10 +453,10 @@ def admin_add_device():
 
 @appf.route("/api/admin/edit_device/<int:device_id>", methods=["POST"])
 def admin_edit_device(device_id):
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         client = ClientService.get_user_by_ip(ip)
@@ -486,10 +487,10 @@ def admin_edit_device(device_id):
 
 @appf.route("/api/admin/delete_device/<int:device_id>", methods=["DELETE"])
 def admin_delete_device(device_id):
-    if PROD:
+    if IS_PROD:
         ip = request.remote_addr
     else:
-        ip = "10.88.88.2"
+        ip = TEST_IP
     permission = False
     try:
         actor = ClientService.get_user_by_ip(ip)
@@ -505,7 +506,28 @@ def admin_delete_device(device_id):
         ClientService.delete_device(device_id, actor["id"])
         return jsonify({"message": "Устройство удалено"}), 200
 
-
+@appf.route("/addmoney/<int:user_id>/<int:value>") ## Я устал, сделаю просто REST
+def make_user_payment(user_id,value):
+    if IS_PROD:
+        ip = request.remote_addr
+    else:
+        ip = TEST_IP
+    permission = False
+    try:
+        actor = ClientService.get_user_by_ip(ip)
+        permission = actor['role'] == UserRoles.ADMIN
+    finally:
+        if not permission:
+            return render_template("error.html", code=403, desc="Доступ запрещен"), 403
+    
+    with get_session() as session:
+        try:
+            user: User = ClientService.get_user_by_id(user_id, session)
+            ClientService.add_payment(user, value, session, f"Учтено денег админом ID {actor["id"]}")
+            user.balance += value
+            return jsonify(orn_to_dict(user)), 200
+        except Exception as e:
+            return jsonify({"error": e}), 500
 # class User(Base):
 #     __tablename__ = "users"
 #
@@ -535,7 +557,7 @@ def admin_delete_device(device_id):
 
 # @appf.route("/panel")
 # def panel():
-#     ip = "10.88.88.2"
+#     ip = TEST_IP
 #     client = get_client(ip)
 #     if not client or client.get("plan") != "admin":
 #         return "Доступ запрещен", 403
@@ -545,7 +567,7 @@ def admin_delete_device(device_id):
 #
 # @appf.route('/add_client', methods=['POST'])
 # def api_add_client():
-#     ip = "10.88.88.2"
+#     ip = TEST_IP
 #     client = get_client(ip)
 #     if not client or client.get("plan") != "admin":
 #         return "Доступ запрещен", 403
@@ -578,7 +600,7 @@ def admin_delete_device(device_id):
 #
 # @appf.route('/delete_client', methods=['POST'])
 # def api_delete_client():
-#     ip = "10.88.88.2"
+#     ip = TEST_IP
 #     client = get_client(ip)
 #     if not client or client.get("plan") != "admin":
 #         return "Доступ запрещен", 403
@@ -603,7 +625,7 @@ def admin_delete_device(device_id):
 #
 # @appf.route('/get_clients', methods=['GET'])
 # def api_get_clients():
-#     ip = "10.88.88.2"
+#     ip = TEST_IP
 #     client = get_client(ip)
 #     if not client or client.get("plan") != "admin":
 #         return "Доступ запрещен", 403
@@ -613,7 +635,7 @@ def admin_delete_device(device_id):
 #
 # @appf.route('/update_client', methods=['POST'])
 # def api_update_client():
-#     remote_ip = "10.88.88.2"
+#     remote_ip = TEST_IP
 #     client = get_client(remote_ip)
 #     if not client or client.get("plan") != "admin":
 #         return "Доступ запрещен", 403

@@ -20,17 +20,18 @@ def _run(cmd):
     
 ## CLASS_ID любого клиента равен 1:1 + ID клиента. Такая логика будет везде.
 
-def _setup_user_class(interface: str,user_id : str,rate: str):
+def _setup_user_class(interface,user_id,rate):
     """
     Can be used for CHANGE class cuz its overwritting
     :param interface: awg0 | ifb0
     :param user_id: any >0
     :param rate: any
     """
-    cmd = f"tc class replace dev {interface} parent {parent} classid {classid+user_id} htb rate {rate * guaranteed_mult}Mbit ceil {rate}Mbit"
+    user_id = str(user_id)
+    cmd = f"tc class replace dev {interface} parent {parent} classid {classid+user_id} htb rate {int(rate) * guaranteed_mult}Mbit ceil {rate}Mbit"
     _run(cmd)
     
-def setup_user_class(user_id: str, rate: str):
+def setup_user_class(user_id, rate):
     """
     Can be used for CHANGE class cuz its overwritting
     :param user_id: any >0
@@ -39,7 +40,7 @@ def setup_user_class(user_id: str, rate: str):
     _setup_user_class(INTERFACE_NAME, user_id, rate)
     # _setup_user_class(MIRROR_INTERFACE_NAME, user_id, rate)
     
-def _setup_device_filter(interface: str, device_id: str, ip: str, parent_id: str, i_type: str):
+def _setup_device_filter(interface, device_id, ip, parent_id, i_type):
     """
     Can be used for CHANGE class cuz its overwritting
     :param interface: awg0 | ifb0
@@ -50,10 +51,11 @@ def _setup_device_filter(interface: str, device_id: str, ip: str, parent_id: str
     """
     if i_type not in ["dst", "src"]:
         return Exception("Неверный тип")
+    parent_id = str(parent_id)
     cmd = f"tc filter replace dev {interface} protocol ip parent 1: prio {device_id} u32 match ip {i_type} {ip} flowid {classid+parent_id}"
     _run(cmd)
     
-def setup_device_filter(device_id: str, ip:str, parent_id: str):
+def setup_device_filter(device_id, ip, parent_id):
     _setup_device_filter(INTERFACE_NAME, device_id, ip, parent_id, "dst")
     # _setup_device_filter(MIRROR_INTERFACE_NAME, device_id, ip, parent_id, "src")
     

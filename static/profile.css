@@ -11,8 +11,10 @@
 	--pg-bar-bg-color: #10B981;
 	--carousel-bg-color: #171F2E;
 	--carousel-text-color: #E2E8F0;
-	--status-active: #10b981;
-	--status-inactive: #e74c3c;
+	--status-active: #4caf50;
+	--status-restricted: #ffb300;
+	--status-blocked: #f44336;
+	--status-inactive: #252525;
 }
 
 .status-active { color: #10B981; }
@@ -43,10 +45,18 @@ body {
 	justify-content: space-between;
 }
 
-.navbar_left {
+.navbar_left, 
+.navbar_right {
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	flex: 1;
+	margin: 0 10px;
+}
+
+.navbar_middle {
+	text-align: center;
+	flex: 0;
+	margin: 0 auto;
 }
 .navbar__icon {
 	height: 0px;

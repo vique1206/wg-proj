@@ -1,62 +1,6 @@
 async function getProfile() {
     const response = await fetch('/api/profile')
  	const data = await response.json();
-//	const data = {
-//    "balance": 0,
-//    "children": [],
-//    "created_at": "Sat, 20 Sep 2025 22:39:16 GMT",
-//    "devices": [
-//        {
-//            "created_at": "Sat, 20 Sep 2025 22:39:16 GMT",
-//            "id": 1,
-//            "ip": "10.88.88.2",
-//            "name": "\u0423\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u043e",
-//            "public_key": "4kGdoJH5uumlSHda0y/rEHwS05JsSUcQ9BXkRcqrdWI=",
-//            "status": "active",
-//            "user_id": 1
-//        },
-//		        {
-//            "created_at": "Sat, 20 Sep 2025 22:39:16 GMT",
-//            "id": 1,
-//            "ip": "10.88.88.3",
-//            "name": "\u0423\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u043e",
-//            "public_key": "4kGdoJH5uumlSHda0y/rEHwS05JsSUcQ9BXkRcqrdWI=",
-//            "status": "inactive",
-//            "user_id": 1
-//        },
-//		        {
-//            "created_at": "Sat, 20 Sep 2025 22:39:16 GMT",
-//            "id": 1,
-//            "ip": "10.88.88.4",
-//            "name": "\u0423\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u043e",
-//            "public_key": "4kGdoJH5uumlSHda0y/rEHwS05JsSUcQ9BXkRcqrdWI=",
-//            "status": "active",
-//            "user_id": 1
-//        }
-//    ],
-//    "extra_devices": 5,
-//    "extra_speed": 0,
-//    "extra_users": 5,
-//    "id": 1,
-//    "ip": "10.88.88.2",
-//    "next_payment": "Sat, 20 Sep 2025 22:39:16 GMT",
-//    "parent": null,
-//    "parent_id": null,
-//    "role": "regular",
-//    "status": "active",
-//    "tariff": {
-//        "description": "\u0422\u0435\u0441\u0442\u043e\u0432\u044b\u0439 \u0442\u0430\u0440\u0438\u0444",
-//        "devices_count": 1,
-//        "id": 1,
-//        "name": "\u0422\u0435\u0441\u0442\u043e\u0432\u044b\u0439",
-//        "payment": 0,
-//        "show": false,
-//        "speed": 20,
-//        "users_count": 1
-//    },
-//    "tariff_id": 1,
-//    "username": "Vlad"
-//}
 	return data
 }
 
@@ -98,6 +42,29 @@ async function buildProfile() {
     // Навбар
     document.querySelector(".user-ip").textContent = data.ip;
     document.querySelector(".user-name").textContent = data.username;
+	const statusObj = document.querySelector(".user-status");
+	const root = getComputedStyle(document.documentElement);
+	switch (data.status) {
+		case "active":
+			statusObj.textContent = "АКТИВЕН";
+			statusObj.style.color = root.getPropertyValue('--status-active');
+			break;
+		case "restricted":
+			statusObj.textContent = "ОГРАНИЧЕН";
+			statusObj.style.color = root.getPropertyValue('--status-restricted');
+			break;
+		case "blocked":
+			statusObj.textContent = "ЗАБЛОКИРОВАН";
+			statusObj.style.color = root.getPropertyValue('--status-blocked');
+			break;
+		case "inactive":
+			statusObj.textContent = "НЕАКТИВЕН";
+			statusObj.style.color = root.getPropertyValue('--status-blocked');
+			break;
+		default:
+			statusObj.textContent = "Не определено";
+			break;
+	}
 
     // Баланс
     document.querySelector(".balance__amount").textContent = `${data.balance} р.`;

@@ -189,6 +189,20 @@ class ClientService:
             if ip not in busy_ips:
                 return ip
         return None
+    
+    @staticmethod
+    def add_payment(user: User, amount:int, session=None, desc: str = ""):
+        if session is None:
+            with get_session() as session:
+                return ClientService.add_payment(user, amount, session, desc)
+        else:
+            payment = Payment(
+                user_id = user.id,
+                amount = amount,
+                desc = desc,
+                date = now_utc()
+            )
+            crud.add(session,payment)
 # import json
 # from config.settings import CLIENTS_JSON_PATH, SUBNET_PREFIX
 # from datetime import datetime, timedelta
