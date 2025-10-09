@@ -35,7 +35,6 @@ def get_profile():
         return "Доступ запрещен, если вы уверены, что это ошибка, обратитесь к администратору", 403
     user.pop("hidden_description")
     user['ip'] = ip
-    print(user["created_at"])
     return jsonify(user)
 
 @appf.route("/api/addDevice", methods=["POST"])
@@ -122,21 +121,20 @@ def edit_device():
     else:
         ip = TEST_IP
         
-        data = request.get_json(force=True, silent=True)
-        with get_session() as session:
-            user = ClientService.get_user_by_ip(ip, session=session)
-            user: User
-            if not user:
-                return jsonify({"error": "Нет прав выполнить эту операцию"}), 403
+    data = request.get_json(force=True, silent=True)
+    with get_session() as session:
+        user: User = ClientService.get_user_by_ip(ip, session=session)
+        if not user:
+            return jsonify({"error": "Нет прав выполнить эту операцию"}), 403
+        
+        ip = data['ip'] if data['ip'] else None
+        device = ClientService.get_device_by_ip(ip, session=session)
+        name = data['name'] if data['name'] else None
+        device.name = name
+        status = DeviceStatus.ACTIVE if data['status'] else DeviceStatus.INACTIVE
+        device.status = status
             
-            ip = data['ip'] if data['ip'] else None
-            device = ClientService.get_device_by_ip(ip, session=session)
-            name = data['name'] if data['name'] else None
-            device.name = name
-            status = DeviceStatus.ACTIVE if data['status'] else DeviceStatus.INACTIVE
-            device.status = status
-            
-            return jsonify({"message":"Успешно"}),200
+    return jsonify({"message":"Успешно"}),200
         
 ## АДМИНСКАЯ ЧАСТЬ, ПРОВЕРЯТЬ ПРАВА ##
 

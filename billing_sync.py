@@ -50,14 +50,14 @@ def device_awg_sync(user: models.User):
                         awg.remove_peer(device._awg_known_key)
                         device._awg_peered = False
                         if awg.is_valid_key(device.public_key):
-                            awg.add_peer(device.public_key)
+                            awg.add_peer(device.ip, device.public_key)
                             device._awg_known_key = device.public_key
                             device._awg_peered = True
                         else:
                             pass
                 else:
                     if awg.is_valid_key(device.public_key):
-                        add_peer(device.public_key)
+                        add_peer(device.ip, device.public_key)
                         device._awg_known_key = device.public_key
                         device._awg_peered = True
             else:
@@ -68,10 +68,6 @@ def device_awg_sync(user: models.User):
         print(f"[DEVICE_AWG_SYNC] Что-то пошло не так: {e}")
         
 def _set_user_class(user: models.User, rate: int):
-    try:
-        rate = str(rate)
-    except:
-        raise TypeError("ЧИСЛА МНЕ ДАЙ")
     import services.traffic as tc
     tc.setup_user_class(user.id, rate)
     user._tc_speed = rate

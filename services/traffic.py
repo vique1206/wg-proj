@@ -9,7 +9,6 @@ from config.settings import INTERFACE_NAME, SPEED_CEIL, IS_PROD
 ## from config.settings import MIRROR_INTERFACE_NAME
 
 parent = "1:"
-classid = parent + "1"
 guaranteed_mult = 0.5
 
 def _run(cmd):
@@ -27,8 +26,10 @@ def _setup_user_class(interface,user_id,rate):
     :param user_id: any >0
     :param rate: any
     """
+    if rate < 0.002:
+        rate = 0.002
     user_id = str(user_id)
-    cmd = f"tc class replace dev {interface} parent {parent} classid {classid+user_id} htb rate {int(rate) * guaranteed_mult}Mbit ceil {rate}Mbit"
+    cmd = f"tc class replace dev {interface} parent {parent} classid {parent+user_id} htb rate {rate * guaranteed_mult}Mbit ceil {rate}Mbit"
     _run(cmd)
     
 def setup_user_class(user_id, rate):
@@ -52,7 +53,7 @@ def _setup_device_filter(interface, device_id, ip, parent_id, i_type):
     if i_type not in ["dst", "src"]:
         return Exception("Неверный тип")
     parent_id = str(parent_id)
-    cmd = f"tc filter replace dev {interface} protocol ip parent 1: prio {device_id} u32 match ip {i_type} {ip} flowid {classid+parent_id}"
+    cmd = f"tc filter replace dev {interface} protocol ip parent 1: prio {device_id} u32 match ip {i_type} {ip} flowid {parent+parent_id}"
     _run(cmd)
     
 def setup_device_filter(device_id, ip, parent_id):
@@ -61,7 +62,7 @@ def setup_device_filter(device_id, ip, parent_id):
     
 def delete_user_class(user_id: str):
     """НАДО УДАЛИТЬ СНАЧАЛА ВСЕ ЗАВИСИМОСТИ!"""
-    cmd = f"tc class del dev awg0 classid {classid+user_id}"
+    cmd = f"tc class del dev awg0 classid {parent+user_id}"
     _run(cmd)
     
 def delete_device_filter(device_id):
