@@ -475,7 +475,7 @@ def admin_edit_device(device_id):
             device.name = data["name"]
         if "status" in data:
             try:
-                device.status = DeviceStatus(data["status"])
+                device.status = DeviceStatus[data["status"]]
             except ValueError:
                 return jsonify({"error": "Некорректный статус"}), 400
         if "public_key" in data:
