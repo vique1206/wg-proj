@@ -1,6 +1,4 @@
 import os
-from database.models import *
-from database import Base, engine, SessionLocal
 
 SETTINGS_PATH = os.path.join("config", "settings.py")
 DB_PATH = os.path.join("database", "vpn.db")
@@ -29,6 +27,8 @@ ENDPOINT = "123.231.123.231:51820"
         print(f"[=] {SETTINGS_PATH} уже существует")
         
 def init_db():
+    from database import Base, engine
+    import database.models
     if os.path.exists(DB_PATH):
         print(f"[=] База уже существует")
         return
@@ -37,6 +37,8 @@ def init_db():
     print(f"[+] База данных создана")
     
 def add_plugs_into_db():
+    from database import SessionLocal
+    from database.models import Tariff
     session = SessionLocal()
     try:
         tariff = Tariff(id=-1, name="НЕСУЩЕСТВУЮЩИЙ", description="НЕ ИСПОЛЬЗОВАТЬ")
