@@ -523,7 +523,7 @@ def make_user_payment(user_id,value):
     with get_session() as session:
         try:
             user: User = ClientService.get_user_by_id(user_id, session)
-            ClientService.add_payment(user, value, session, f"Учтено денег админом ID {actor["id"]}")
+            ClientService.add_payment(user, value, session, f"Учтено денег админом ID {actor['id']}")
             user.balance += value
             return jsonify(orn_to_dict(user)), 200
         except Exception as e:
