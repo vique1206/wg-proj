@@ -72,4 +72,4 @@ def delete_user_class(user_id):
     _run(cmd)
     
 def delete_device_filter(device_id):
-    cmd = f"tc filter del dev awg0 parent 1: pref {device_id}"
+    cmd = f"tc filter del dev awg0 parent 1: prio {device_id}"
